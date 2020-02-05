@@ -1,5 +1,6 @@
 #Written in CamelCase because the code validation tool
 #only accepts the function to be named like this
+#1.1
 def PatternCount(Text, Pattern):
     
     count = 0
@@ -13,7 +14,7 @@ def PatternCount(Text, Pattern):
     
     return count
 
-
+#1.2
 def pattern_find(text, kmer):
 
 	result = ""
@@ -35,3 +36,17 @@ def pattern_find(text, kmer):
 	
 	return [result, count]
 
+
+#1.3
+def frequency_map(text, k):
+	text_len = len(text)
+	freq_map = {}
+
+	for i in range(text_len - k + 1):
+		pattern = text[i:i+k]
+		if (pattern in freq_map):
+			freq_map[pattern] += 1
+		else:
+			freq_map[pattern] = 1
+
+	return freq_map
