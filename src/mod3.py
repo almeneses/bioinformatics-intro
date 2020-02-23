@@ -1,9 +1,10 @@
 #3.1
+# Count
 # Input:  A set of kmers Motifs
 # Output: Count(Motifs)
 def count_motifs(motifs):
 
-    count_dict = create_motif_count_dict(len(motifs[0]))
+    count_dict = {key : [0]*len(motifs[0]) for key in "ATCG"}
     matrix_len = len(motifs)
     motif_len = len(motifs[0])
     
@@ -15,6 +16,7 @@ def count_motifs(motifs):
     return count_dict
 
 #3.2
+# Profile
 # Input:  A list of kmers Motifs
 # Output: the profile matrix of Motifs, as a dictionary of lists.
 def profile(motifs):
@@ -25,27 +27,68 @@ def profile(motifs):
     
     return count_dict
 
+#3.3
+# Consensus
+# Input:  A set of kmers Motifs
+# Output: A consensus string of Motifs.
 
-# Helper function
-# Input: the lenght of the strings in the motif matrix
-# Output: Dictionary of list of zeroes, each one the size of length
-def create_motif_count_dict(length):
+def consensus(motifs):
+
+    count_dict = count_motifs(motifs)
+    j = len(motifs)
+    concensus = ""
+
+    for j in range(len(motifs[0])):
+        frequent_nucleotide = ""
+        quantity = 0
+        for key in count_dict.keys():
+            if count_dict[key][j] > quantity:
+                quantity = count_dict[key][j]
+                frequent_nucleotide = key
+        concensus += frequent_nucleotide
     
-    size = range(length)
-    return {
-        "A": [0 for x in size],
-        "T": [0 for x in size],
-        "C": [0 for x in size],
-        "G": [0 for x in size],
-    }
+    return concensus        
 
+def score(motifs):
+
+    most_frequent = consensus(motifs)
+    count = count_motifs(motifs)
+    elements_per_column = len(motifs)
+    score = 0
+
+    for j in range(len(most_frequent)):
+        score += elements_per_column - count[most_frequent[j]][j]
+        
+    return score
 
 
 def test_functions():
 
-    count_motifs_input = ["AACGTA", "CCCGTT", "CACCTT", "GGATTA", "TTCCGG"]
+    count_motifs_input = [
+    "AACGTA",
+    "CCCGTT",
+    "CACCTT",
+    "GGATTA",
+    "TTCCGG"
+    ]
     print (count_motifs(count_motifs_input))
 
     print(profile(count_motifs_input))
+    print(consensus(count_motifs_input))
+
+
+    score_input = [
+    "GTACAACTGT",
+    "CAACTATGAA",
+    "TCCTACAGGA",
+    "AAGCAAGGGT",
+    "GCGTACGACC",
+    "TCGTCAGCGT",
+    "AACAAGGTCA",
+    "CTCAGGCGTC",
+    "GGATCCAGGT",
+    "GGCAAGTACC"
+    ]
+    print(score(score_input))
 
 test_functions()
