@@ -4,7 +4,7 @@
 # Output: Count(Motifs)
 def count_motifs(motifs):
 
-    count_dict = {key : [0]*len(motifs[0]) for key in "ATCG"}
+    count_dict = {key : [0]*len(motifs[0]) for key in "ACGT"}
     matrix_len = len(motifs)
     motif_len = len(motifs[0])
     
@@ -64,15 +64,35 @@ def score(motifs):
 
 
 # 3.4.1
-def pr(consensus, profile):
+def pr(text, profile):
     """
         Returns the probability that profile
-        generates the consensus string.
+        generates the text string.
     """
     p = 1
-    for i in range(len(consensus)):
-        p *= profile[consensus[i]][i]
+    for i in range(len(text)):
+        p *= profile[text[i]][i]
     return p
+    
+# 3.4.4
+# Profile-most Probable k-mer Problem: Find a Profile-most probable k-mer in a string.
+# Input: A string text, an integer k, and a 4 x k matrix profile.
+# Output: A Profile-most probable k-mer in Text.
+def profile_most_probable_kmer(text, profile, k):
+    
+    probability = -1
+    most_probable_text = ""
+    
+    for i in range(len(text) - k+1):
+
+        current_pr = pr(text[i:i+k], profile)
+        
+        if current_pr > probability:
+            probability = current_pr
+            most_probable_text = text[i:i+k]
+
+    return most_probable_text
+    
 
 def test_functions():
 
@@ -102,4 +122,16 @@ def test_functions():
     ]
     print(score(score_input))
 
+    #print(profile_most_probable_kmer("ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT", {
+    #    "A": [0.2, 0.2, 0.3, 0.2, 0.3],
+    #    "C": [0.4, 0.3, 0.1, 0.5, 0.1],
+    #    "G": [0.3, 0.3, 0.5, 0.2, 0.4],
+    #    "T": [0.1, 0.2, 0.1, 0.1, 0.2]}, 5)
+    #)
+
+    print(profile_most_probable_kmer("AACCGGTT",{
+    "A":[1.0, 1.0, 1.0],
+    "C":[0.0, 0.0, 0.0],
+    "G":[0.0, 0.0, 0.0],
+    "T":[0.0, 0.0, 0.0]}, 3))
 test_functions()
