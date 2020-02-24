@@ -20,7 +20,10 @@ def count_motifs(motifs):
 # Input:  A list of kmers Motifs
 # Output: the profile matrix of Motifs, as a dictionary of lists.
 def profile(motifs):
-
+    """
+        Returns the profile matrix of motifs, as a dictionary of lists, from
+        a list of kmers as motifs.
+    """
     count_dict  = count_motifs(motifs)
     motif_len = len(motifs)
     for key, value in count_dict.items():
@@ -74,7 +77,7 @@ def pr(text, profile):
         p *= profile[text[i]][i]
     return p
     
-# 3.4.4
+# 3.4.2
 # Profile-most Probable k-mer Problem: Find a Profile-most probable k-mer in a string.
 # Input: A string text, an integer k, and a 4 x k matrix profile.
 # Output: A Profile-most probable k-mer in Text.
@@ -93,6 +96,21 @@ def profile_most_probable_kmer(text, profile, k):
 
     return most_probable_text
     
+#3.4.3
+def greedy_motif_search(dna, k, t):
+    best_motifs = [x[0:k] for x in dna]
+    
+    for i in range(len(dna[0]) - k + 1):
+        motifs = [dna[0][i:i+k]]
+        for j in range(1, t):
+            prof = profile(motifs)
+            motifs.append(profile_most_probable_kmer(dna[j], prof, k))
+
+        if score(motifs) < score(best_motifs):
+            best_motifs = motifs
+
+    return best_motifs
+
 
 def test_functions():
 
@@ -122,16 +140,35 @@ def test_functions():
     ]
     print(score(score_input))
 
-    #print(profile_most_probable_kmer("ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT", {
-    #    "A": [0.2, 0.2, 0.3, 0.2, 0.3],
-    #    "C": [0.4, 0.3, 0.1, 0.5, 0.1],
-    #    "G": [0.3, 0.3, 0.5, 0.2, 0.4],
-    #    "T": [0.1, 0.2, 0.1, 0.1, 0.2]}, 5)
-    #)
+    profile_most_probable_kmer_input = [
+        "ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT",
+        {
+        "A": [0.2, 0.2, 0.3, 0.2, 0.3],
+        "C": [0.4, 0.3, 0.1, 0.5, 0.1],
+        "G": [0.3, 0.3, 0.5, 0.2, 0.4],
+        "T": [0.1, 0.2, 0.1, 0.1, 0.2]
+        },
+        5
+    ]
 
-    print(profile_most_probable_kmer("AACCGGTT",{
-    "A":[1.0, 1.0, 1.0],
-    "C":[0.0, 0.0, 0.0],
-    "G":[0.0, 0.0, 0.0],
-    "T":[0.0, 0.0, 0.0]}, 3))
+    print(profile_most_probable_kmer(profile_most_probable_kmer_input[0], 
+    profile_most_probable_kmer_input[1], profile_most_probable_kmer_input[2]))
+
+    greedy_motif_search_input = [
+        ["GAGGCGCACATCATTATCGATAACGATTCGCCGCATTGCC",
+        "TCATCGAATCCGATAACTGACACCTGCTCTGGCACCGCTC",
+        "TCGGCGGTATAGCCAGAAAGCGTAGTGCCAATAATTTCCT",
+        "GAGTCGTGGTGAAGTGTGGGTTATGGGGAAAGGCAGACTG",
+        "GACGGCAACTACGGTTACAACGCAGCAACCGAAGAATATT",
+        "TCTGTTGTTGCTAACACCGTTAAAGGCGGCGACGGCAACT",
+        "AAGCGGCCAACGTAGGCGCGGCTTGGCATCTCGGTGTGTG",
+        "AATTGAAAGGCGCATCTTACTCTTTTCGCTTTCAAAAAAA"], 5, 8
+    ]
+        #["GGCGTTCAGGCA",
+        #"AAGAATCAGTCA",
+        #"CAAGGAGTTCGC",
+        #"CACGTCAATCAC",
+        #"CAATAATATTCG"], 3, 5]
+    print(greedy_motif_search(greedy_motif_search_input[0], greedy_motif_search_input[1], greedy_motif_search_input[2]))
+    
 test_functions()
