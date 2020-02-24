@@ -1,4 +1,4 @@
-#3.1
+#3.3.1
 # Count
 # Input:  A set of kmers Motifs
 # Output: Count(Motifs)
@@ -15,11 +15,12 @@ def count_motifs(motifs):
     
     return count_dict
 
-#3.2
+#3.3.2
 # Profile
 # Input:  A list of kmers Motifs
 # Output: the profile matrix of Motifs, as a dictionary of lists.
 def profile(motifs):
+
     count_dict  = count_motifs(motifs)
     motif_len = len(motifs)
     for key, value in count_dict.items():
@@ -27,13 +28,13 @@ def profile(motifs):
     
     return count_dict
 
-#3.3
+#3.3.3
 # Consensus
 # Input:  A set of kmers Motifs
 # Output: A consensus string of Motifs.
 
 def consensus(motifs):
-
+    
     count_dict = count_motifs(motifs)
     j = len(motifs)
     concensus = ""
@@ -62,6 +63,17 @@ def score(motifs):
     return score
 
 
+# 3.4.1
+def pr(consensus, profile):
+    """
+        Returns the probability that profile
+        generates the consensus string.
+    """
+    p = 1
+    for i in range(len(consensus)):
+        p *= profile[consensus[i]][i]
+    return p
+
 def test_functions():
 
     count_motifs_input = [
@@ -72,7 +84,6 @@ def test_functions():
     "TTCCGG"
     ]
     print (count_motifs(count_motifs_input))
-
     print(profile(count_motifs_input))
     print(consensus(count_motifs_input))
 
