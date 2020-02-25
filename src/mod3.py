@@ -98,6 +98,10 @@ def profile_most_probable_kmer(text, profile, k):
     
 #3.4.3
 def greedy_motif_search(dna, k, t):
+    """
+        Returns an array of t motifs of length k from the
+        Dna string array dna using a greedy algorithm approach.
+    """
     best_motifs = [x[0:k] for x in dna]
     
     for i in range(len(dna[0]) - k + 1):
@@ -164,11 +168,10 @@ def test_functions():
         "AAGCGGCCAACGTAGGCGCGGCTTGGCATCTCGGTGTGTG",
         "AATTGAAAGGCGCATCTTACTCTTTTCGCTTTCAAAAAAA"], 5, 8
     ]
-        #["GGCGTTCAGGCA",
-        #"AAGAATCAGTCA",
-        #"CAAGGAGTTCGC",
-        #"CACGTCAATCAC",
-        #"CAATAATATTCG"], 3, 5]
     print(greedy_motif_search(greedy_motif_search_input[0], greedy_motif_search_input[1], greedy_motif_search_input[2]))
     
+    
+
+
+
 test_functions()
