@@ -169,4 +169,4 @@ def test_functions():
         profile_most_probable_kmer_input[1], profile_most_probable_kmer_input[2]))
     print(greedy_motif_search(greedy_motif_search_input[0], greedy_motif_search_input[1], greedy_motif_search_input[2]))
 
-test_functions()
+#test_functions()
