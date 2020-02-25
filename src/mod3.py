@@ -125,11 +125,7 @@ def test_functions():
     "GGATTA",
     "TTCCGG"
     ]
-    print (count_motifs(count_motifs_input))
-    print(profile(count_motifs_input))
-    print(consensus(count_motifs_input))
-
-
+   
     score_input = [
     "GTACAACTGT",
     "CAACTATGAA",
@@ -142,8 +138,7 @@ def test_functions():
     "GGATCCAGGT",
     "GGCAAGTACC"
     ]
-    print(score(score_input))
-
+    
     profile_most_probable_kmer_input = [
         "ACCTGTTTATTGCCTAAGTTCCGAACAAACCCAATATAGCCCGAGGGCCT",
         {
@@ -155,9 +150,6 @@ def test_functions():
         5
     ]
 
-    print(profile_most_probable_kmer(profile_most_probable_kmer_input[0], 
-    profile_most_probable_kmer_input[1], profile_most_probable_kmer_input[2]))
-
     greedy_motif_search_input = [
         ["GAGGCGCACATCATTATCGATAACGATTCGCCGCATTGCC",
         "TCATCGAATCCGATAACTGACACCTGCTCTGGCACCGCTC",
@@ -168,10 +160,13 @@ def test_functions():
         "AAGCGGCCAACGTAGGCGCGGCTTGGCATCTCGGTGTGTG",
         "AATTGAAAGGCGCATCTTACTCTTTTCGCTTTCAAAAAAA"], 5, 8
     ]
+
+    print (count_motifs(count_motifs_input))
+    print(profile(count_motifs_input))
+    print(consensus(count_motifs_input))
+    print(score(score_input))
+    print(profile_most_probable_kmer(profile_most_probable_kmer_input[0], 
+        profile_most_probable_kmer_input[1], profile_most_probable_kmer_input[2]))
     print(greedy_motif_search(greedy_motif_search_input[0], greedy_motif_search_input[1], greedy_motif_search_input[2]))
-    
-    
-
-
 
 test_functions()
