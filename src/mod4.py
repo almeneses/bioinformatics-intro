@@ -2,7 +2,7 @@ from mod3 import *
 #4.1.1
 # Input:  A set of kmers Motifs
 # Output: CountWithPseudocounts(Motifs)
-def count_with_pseudocounts(motifs:list):
+def count_with_pseudocounts(motifs: list) -> dict:
     """
         Returns a dict with the count of each nucleotide in
         the motifs list using Laplace's rule of Succession
@@ -19,7 +19,7 @@ def count_with_pseudocounts(motifs:list):
     return count_dict
 
 #4.1.2
-def profile_with_pseudocounts(motifs:list):
+def profile_with_pseudocounts(motifs: list) -> dict:
     """
         Takes a list of strings Motifs as input and returns the profile matrix of Motifs 
         with pseudocounts as a dictionary of lists.
@@ -45,7 +45,7 @@ def profile_with_pseudocounts(motifs:list):
     return pseudocounts
 
 #4.1.3
-def greedy_motif_search_with_pseudocounts(dna, k, t):
+def greedy_motif_search_with_pseudocounts(dna: list, k: int, t: int) -> list:
     """
         Takes a list of strings dna followed by integers k and t and returns the result 
         of running GreedyMotifSearch where each profile matrix is generated with 
@@ -77,6 +77,32 @@ def greedy_motif_search_with_pseudocounts(dna, k, t):
 
     return best_motifs
 
+#4.2.1
+def motifs(profile: dict, dna: list) -> list:
+    """
+        Takes a profile dictionary corresponding to a list of strings dna 
+        and returns a list of the profile's most probable k-mers in each
+        string from dna.
+
+        Parameters
+        ---
+            profile : dict(list(str))
+                Profile matrix.
+            dna : list<str>
+                List of k-mers.
+        
+        Returns
+        ---
+            List of the given profile's most probable k-mers in each string of dna.
+    """
+    result_motifs = []
+    k = len(profile[next(iter(profile))])
+    for i in dna:
+        result_motifs.append(profile_most_probable_kmer(i, profile, k))
+    
+    return result_motifs
+    
+
 def test_functions():
     count_with_pseudocounts_input = [
         "AACGTA",
@@ -95,6 +121,18 @@ def test_functions():
         "CAATAATATTCG"
         ], 3, 5]
 
+    motifs_input = [
+        {"A":[0.8, 0.0, 0.0, 0.2],
+        "C":[0.0, 0.6, 0.2, 0.0],
+        "G":[0.2, 0.2, 0.8, 0.0],
+        "T":[0.0, 0.2, 0.0, 0.8]},
+        ["TTACCTTAAC",
+        "GATGTCTGTC",
+        "ACGGCGTTAG",
+        "CCCTAACGAG",
+        "CGTCAGAGGT"]
+    ]
+
     print(count_with_pseudocounts(count_with_pseudocounts_input))
     print(profile_with_pseudocounts(count_with_pseudocounts_input))
     print(greedy_motif_search_with_pseudocounts(
@@ -102,5 +140,6 @@ def test_functions():
         greedy_motif_search_pseudocounts_input[1],
         greedy_motif_search_pseudocounts_input[2])
     )
+    print(motifs(motifs_input[0], motifs_input[1]))
 
 test_functions()
