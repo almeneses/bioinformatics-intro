@@ -1,3 +1,4 @@
+import random
 from mod3 import *
 #4.1.1
 # Input:  A set of kmers Motifs
@@ -101,7 +102,31 @@ def motifs(profile: dict, dna: list) -> list:
         result_motifs.append(profile_most_probable_kmer(i, profile, k))
     
     return result_motifs
+
+#4.2.2
+def random_motifs(dna: list, k: int , t: int) -> list:
+    """
+        Generates a list of random t motifs of length k each from a list of string dna.
+
+        Parameters
+        ---
+            dna : list<str>
+                List of k-mer motifs.
+            k : int
+                Length of the resulting motifs
+            t : int
+                Number of the resutling motifs
+        Returns
+        ---
+        List of randomly picked t motifs of lenght k.
+
+    """
+    result = []
+    for i in dna:
+        random_kmer = random.randint(0, len(dna[0]) - k)
+        result.append(i[random_kmer:random_kmer+k])
     
+    return result
 
 def test_functions():
     count_with_pseudocounts_input = [
@@ -133,6 +158,15 @@ def test_functions():
         "CGTCAGAGGT"]
     ]
 
+    random_motifs_input = [[
+
+        "TTACCTTAAC",
+        "GATGTCTGTC",
+        "ACGGCGTTAG",
+        "CCCTAACGAG",
+        "CGTCAGAGGT"
+    ], 3, 5]
+
     print(count_with_pseudocounts(count_with_pseudocounts_input))
     print(profile_with_pseudocounts(count_with_pseudocounts_input))
     print(greedy_motif_search_with_pseudocounts(
@@ -141,5 +175,6 @@ def test_functions():
         greedy_motif_search_pseudocounts_input[2])
     )
     print(motifs(motifs_input[0], motifs_input[1]))
+    print(random_motifs(random_motifs_input[0], random_motifs_input[1], random_motifs_input[2]))
 
 test_functions()
