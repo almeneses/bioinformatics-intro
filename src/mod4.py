@@ -63,7 +63,7 @@ def greedy_motif_search_with_pseudocounts(dna: list, k: int, t: int) -> list:
 
         Returns
         ---
-            List of strings of length k containing the resulting t motifs. 
+            list : Strings of length k containing the resulting t motifs. 
     """
     best_motifs = [x[0:k] for x in dna]
     
@@ -94,7 +94,7 @@ def motifs(profile: dict, dna: list) -> list:
         
         Returns
         ---
-            List of the given profile's most probable k-mers in each string of dna.
+            list : The given profile's most probable k-mers in each string of dna.
     """
     result_motifs = []
     k = len(profile[next(iter(profile))])
@@ -118,7 +118,7 @@ def random_motifs(dna: list, k: int , t: int) -> list:
                 Number of the resutling motifs
         Returns
         ---
-        List of randomly picked t motifs of lenght k.
+        list : randomly picked t motifs of lenght k.
 
     """
     result = []
