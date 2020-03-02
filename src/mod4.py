@@ -128,6 +128,34 @@ def random_motifs(dna: list, k: int , t: int) -> list:
     
     return result
 
+#4.2.3
+def randomized_motif_search(dna: list, k: int, t: int) -> list:
+    """
+        Generates a list of random t motifs of length k each from a list of string dna using
+        a cotinuously improving best motifs search.
+
+        Parameters
+        ---
+            dna : list<str>
+                List of k-mer motifs.
+            k : int
+                Length of the resulting motifs
+            t : int
+                Number of the resutling motifs
+        Returns
+        ---
+        List of best possible t motifs of lenght k.
+    """
+
+    mot = best_motifs = random_motifs(dna, k, t)
+    while True:
+        profile = profile_with_pseudocounts(mot)
+        mot = motifs(profile, dna)
+        if score(mot) < score(best_motifs):
+            best_motifs = mot
+        else:
+            return best_motifs
+
 def test_functions():
     count_with_pseudocounts_input = [
         "AACGTA",
@@ -166,6 +194,17 @@ def test_functions():
         "CCCTAACGAG",
         "CGTCAGAGGT"
     ], 3, 5]
+    randomized_motif_search_input = [
+        [
+        "CGCCCCTCTCGGGGGTGTTCAGTAAACGGCCA",
+        "GGGCGAGGTATGTGTAAGTGCCAAGGTGCCAG",
+        "TAGTACCGAGACCGAAAGAAGTATACAGGCGT",
+        "TAGATCAAGTTTCAGGTGCACGTCGGTGAACC",
+        "AATCCACCAGCTCCACGTGCAATGTTGGCCTA"
+        ], 
+        8, 
+        5
+    ]
 
     print(count_with_pseudocounts(count_with_pseudocounts_input))
     print(profile_with_pseudocounts(count_with_pseudocounts_input))
@@ -176,5 +215,7 @@ def test_functions():
     )
     print(motifs(motifs_input[0], motifs_input[1]))
     print(random_motifs(random_motifs_input[0], random_motifs_input[1], random_motifs_input[2]))
-
+    print(randomized_motif_search(
+        randomized_motif_search_input[0], randomized_motif_search_input[1], randomized_motif_search_input[2]))
+        
 test_functions()
