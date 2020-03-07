@@ -144,7 +144,7 @@ def randomized_motif_search(dna: list, k: int, t: int) -> list:
                 Number of the resutling motifs
         Returns
         ---
-        List of best possible t motifs of lenght k.
+            List of best possible t motifs of lenght k.
     """
 
     mot = best_motifs = random_motifs(dna, k, t)
@@ -155,6 +155,25 @@ def randomized_motif_search(dna: list, k: int, t: int) -> list:
             best_motifs = mot
         else:
             return best_motifs
+
+#4.4.1
+def normalize(probabilities : dict) -> dict:
+    """
+        Normalizes the probability of each k-mer in the probabilities dictionary. 
+        
+        Parameters
+        ---
+        probabilities : dict
+            A dictionary of probabilities, where keys are k-mers and values 
+            are the probabilities of these k-mers (which do not necessarily sum up to 1).
+        
+        Returns
+        ---
+            A normalized dictionary where the probability of each k-mer was divided by the sum of all k-mers' probabilities.
+    """
+    total = sum(probabilities.values())
+    return {key : value / total for key, value in probabilities.items()}
+
 
 def test_functions():
     count_with_pseudocounts_input = [
@@ -206,6 +225,8 @@ def test_functions():
         5
     ]
 
+    normalize_input = {'A': 0.1, 'C': 0.1, 'G': 0.1, 'T': 0.1}
+
     print(count_with_pseudocounts(count_with_pseudocounts_input))
     print(profile_with_pseudocounts(count_with_pseudocounts_input))
     print(greedy_motif_search_with_pseudocounts(
@@ -217,5 +238,8 @@ def test_functions():
     print(random_motifs(random_motifs_input[0], random_motifs_input[1], random_motifs_input[2]))
     print(randomized_motif_search(
         randomized_motif_search_input[0], randomized_motif_search_input[1], randomized_motif_search_input[2]))
-        
-test_functions()
+    
+    print(normalize(normalize_input))
+
+if __name__ == '__main__':
+    test_functions()
