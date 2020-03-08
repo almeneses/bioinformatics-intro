@@ -174,6 +174,29 @@ def normalize(probabilities : dict) -> dict:
     total = sum(probabilities.values())
     return {key : value / total for key, value in probabilities.items()}
 
+#4.4.2
+def weighted_dice(probabilities : dict) -> str:
+    """
+        Randomly chooses a k-mer from the input.
+
+        Parameters
+        ---
+            probabilities : dict
+                A dictionary of probabilities, where keys are k-mers and values 
+                are the probabilities of these k-mers (they have to sum up 1).
+
+        Returns
+        ---
+            A randomly chosen k-mer with respect to the values in the probabilities input.
+    """
+
+    prob = random.uniform(0, 1)
+    total = 0
+    for key in probabilities:
+        if total <= prob <= (total + probabilities[key]):
+            return key
+        total += probabilities[key]
+
 
 def test_functions():
     count_with_pseudocounts_input = [
@@ -226,6 +249,7 @@ def test_functions():
     ]
 
     normalize_input = {'A': 0.1, 'C': 0.1, 'G': 0.1, 'T': 0.1}
+    weighted_dice_input = {'A': 0.25, 'C': 0.25, 'G': 0.25, 'T': 0.25} 
 
     print(count_with_pseudocounts(count_with_pseudocounts_input))
     print(profile_with_pseudocounts(count_with_pseudocounts_input))
@@ -240,6 +264,6 @@ def test_functions():
         randomized_motif_search_input[0], randomized_motif_search_input[1], randomized_motif_search_input[2]))
     
     print(normalize(normalize_input))
-
+    print(weighted_dice(weighted_dice_input))
 if __name__ == '__main__':
     test_functions()
