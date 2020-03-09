@@ -1,5 +1,7 @@
 import random
+from typing import List, Dict
 from mod3 import *
+
 #4.1.1
 # Input:  A set of kmers Motifs
 # Output: CountWithPseudocounts(Motifs)
@@ -157,7 +159,7 @@ def randomized_motif_search(dna: list, k: int, t: int) -> list:
             return best_motifs
 
 #4.4.1
-def normalize(probabilities : dict) -> dict:
+def normalize(probabilities : Dict[str, float]) -> dict:
     """
         Normalizes the probability of each k-mer in the probabilities dictionary. 
         
@@ -197,6 +199,35 @@ def weighted_dice(probabilities : dict) -> str:
             return key
         total += probabilities[key]
 
+#4.4.3
+def profile_generated_string(text : str, profile : Dict[str, List[float]], k : int) -> Dict[str, List[float]]:
+    """
+        Randomly chooses a k-mer from a string 'text' based on a profile matrix 'profile'.
+
+        Parameters
+        ---
+            text : str
+                A string of nucleotides.
+
+            profile : Dict[str, List[float]]
+                The profile matrix.
+
+            k : int
+                Length of the chosen mer.
+
+        Returns
+        ---
+            Randomly chosen str of size k.
+            
+    """
+    n = len(text)
+    probabilities = {}
+    
+    for i in range(n-k+1):
+        probabilities[text[i:i+k]] = pr(text[i:i+k], profile)
+    probabilities = normalize(probabilities)
+    return weighted_dice(probabilities)
+    
 
 def test_functions():
     count_with_pseudocounts_input = [
@@ -250,6 +281,11 @@ def test_functions():
 
     normalize_input = {'A': 0.1, 'C': 0.1, 'G': 0.1, 'T': 0.1}
     weighted_dice_input = {'A': 0.25, 'C': 0.25, 'G': 0.25, 'T': 0.25} 
+    profile_generated_string_input = [
+        "AAACCCAAACCC",
+        {'A': [0.5, 0.1], 'C': [0.3, 0.2], 'G': [0.2, 0.4], 'T': [0.0, 0.3]},
+        2
+    ]
 
     print(count_with_pseudocounts(count_with_pseudocounts_input))
     print(profile_with_pseudocounts(count_with_pseudocounts_input))
@@ -265,5 +301,9 @@ def test_functions():
     
     print(normalize(normalize_input))
     print(weighted_dice(weighted_dice_input))
+    print(profile_generated_string(
+        profile_generated_string_input[0], profile_generated_string_input[1], profile_generated_string_input[2]))
+
+
 if __name__ == '__main__':
     test_functions()
