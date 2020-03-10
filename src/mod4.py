@@ -228,7 +228,40 @@ def profile_generated_string(text : str, profile : Dict[str, List[float]], k : i
     probabilities = normalize(probabilities)
     return weighted_dice(probabilities)
     
+#4.4.4
+def gibbs_sampler(dna : List[str], k : int, t : int, n : int = 100) -> List[str]:
+    """
+        Returns a list of best posible motifs using the Gibbs sampler method.
 
+        Parameters
+        ---
+            dna : List[str]
+                List of dna sequences.
+            k : int
+                Length of the resulting motifs.
+            t : int
+                Amount of generated motifs.
+            n : int
+                Number of iterations for finding the motifs (default 100).
+        
+        Returns
+        ---
+            List of best possible motifs.
+    """
+
+    best_motifs = random_motifs(dna, k, t)
+    
+    for i in range(n):
+        
+        rand = random.randint(1, t)
+        prof = profile_with_pseudocounts(best_motifs)
+        motif = motifs(prof, dna)
+        
+        if score(motif) < score(best_motifs):
+            best_motifs = motif
+    
+    return best_motifs
+        
 def test_functions():
     count_with_pseudocounts_input = [
         "AACGTA",
@@ -287,6 +320,15 @@ def test_functions():
         2
     ]
 
+    gibbs_sampler_input = [
+        [
+            "CGCCCCTCTCGGGGGTGTTCAGTAAACGGCCA",
+            "GGGCGAGGTATGTGTAAGTGCCAAGGTGCCAG",
+            "TAGTACCGAGACCGAAAGAAGTATACAGGCGT",
+            "TAGATCAAGTTTCAGGTGCACGTCGGTGAACC",
+            "AATCCACCAGCTCCACGTGCAATGTTGGCCTA"
+        ], 8, 5, 100]
+
     print(count_with_pseudocounts(count_with_pseudocounts_input))
     print(profile_with_pseudocounts(count_with_pseudocounts_input))
     print(greedy_motif_search_with_pseudocounts(
@@ -303,7 +345,7 @@ def test_functions():
     print(weighted_dice(weighted_dice_input))
     print(profile_generated_string(
         profile_generated_string_input[0], profile_generated_string_input[1], profile_generated_string_input[2]))
-
+    print(gibbs_sampler(gibbs_sampler_input[0], gibbs_sampler_input[1], gibbs_sampler_input[2], gibbs_sampler_input[3]))
 
 if __name__ == '__main__':
     test_functions()
