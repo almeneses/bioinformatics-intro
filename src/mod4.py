@@ -3,16 +3,24 @@ from typing import List, Dict
 from mod3 import *
 
 #4.1.1
-# Input:  A set of kmers Motifs
-# Output: CountWithPseudocounts(Motifs)
-def count_with_pseudocounts(motifs: list) -> dict:
+def count_with_pseudocounts(motifs: List[str]) -> Dict[str, List[int]]:
     """
-        Returns a dict with the count of each nucleotide in
-        the motifs list using Laplace's rule of Succession
+        Creates a dictionary with the count of each nucleotide in
+        the motifs list using Laplace's rule of Succession.
+        
+        Parameters
+        ---
+            motifs : List[str]
+                List of motifs.
+
+        Returns
+        ---
+           Dict[str, List[int]]:  The count of each nucleotide.
     """
-    count_dict = {key : [1]*len(motifs[0]) for key in "ACGT"}
-    matrix_len = len(motifs)
     motif_len = len(motifs[0])
+    count_dict = {key : [1]*motif_len for key in "ACGT"}
+    matrix_len = len(motifs)
+
     
     for i in range(matrix_len):
         for j in range(motif_len):
@@ -22,19 +30,19 @@ def count_with_pseudocounts(motifs: list) -> dict:
     return count_dict
 
 #4.1.2
-def profile_with_pseudocounts(motifs: list) -> dict:
+def profile_with_pseudocounts(motifs: List[str]) -> Dict[str, List[str]]:
     """
         Takes a list of strings Motifs as input and returns the profile matrix of Motifs 
         with pseudocounts as a dictionary of lists.
         
         Parameters
         ---
-            motifs : list<str>
+            motifs : List[str]
                 The list of k-mer motifs.
         
         Returns
         ---
-            Dictionary with the pseudocount (adding 1 to each count) of each nucleotide 
+            Dict[str, List[str]] : Dictionary with the pseudocount (adding 1 to each count) of each nucleotide
             in the motifs list using Laplace's rule of Succession.
 
     """
@@ -48,7 +56,7 @@ def profile_with_pseudocounts(motifs: list) -> dict:
     return pseudocounts
 
 #4.1.3
-def greedy_motif_search_with_pseudocounts(dna: list, k: int, t: int) -> list:
+def greedy_motif_search_with_pseudocounts(dna: List[str], k: int, t: int) -> List[str]:
     """
         Takes a list of strings dna followed by integers k and t and returns the result 
         of running GreedyMotifSearch where each profile matrix is generated with 
@@ -56,7 +64,7 @@ def greedy_motif_search_with_pseudocounts(dna: list, k: int, t: int) -> list:
 
         Parameters
         ---
-            dna : list<str>
+            dna : List[str]
                 List of k-mer motifs.
             k : int
                 Length of the resulting motifs
@@ -65,7 +73,7 @@ def greedy_motif_search_with_pseudocounts(dna: list, k: int, t: int) -> list:
 
         Returns
         ---
-            list : Strings of length k containing the resulting t motifs. 
+            List[str] : Strings of length k containing the resulting t motifs. 
     """
     best_motifs = [x[0:k] for x in dna]
     
@@ -81,7 +89,7 @@ def greedy_motif_search_with_pseudocounts(dna: list, k: int, t: int) -> list:
     return best_motifs
 
 #4.2.1
-def motifs(profile: dict, dna: list) -> list:
+def motifs(profile: Dict[str, List[float]], dna: List[str]) -> List[str]:
     """
         Takes a profile dictionary corresponding to a list of strings dna 
         and returns a list of the profile's most probable k-mers in each
@@ -89,14 +97,15 @@ def motifs(profile: dict, dna: list) -> list:
 
         Parameters
         ---
-            profile : dict(list(str))
-                Profile matrix.
-            dna : list<str>
+            profile : Dict[str, List[float]]
+                The profile matrix.
+
+            dna : List[str]
                 List of k-mers.
         
         Returns
         ---
-            list : The given profile's most probable k-mers in each string of dna.
+            List[str] : The probable k-mers in each string of dna.
     """
     result_motifs = []
     k = len(profile[next(iter(profile))])
@@ -106,13 +115,13 @@ def motifs(profile: dict, dna: list) -> list:
     return result_motifs
 
 #4.2.2
-def random_motifs(dna: list, k: int , t: int) -> list:
+def random_motifs(dna: List[str], k: int , t: int) -> List[str]:
     """
         Generates a list of random t motifs of length k each from a list of string dna.
 
         Parameters
         ---
-            dna : list<str>
+            dna : List[str]
                 List of k-mer motifs.
             k : int
                 Length of the resulting motifs
@@ -120,7 +129,7 @@ def random_motifs(dna: list, k: int , t: int) -> list:
                 Number of the resutling motifs
         Returns
         ---
-        list : randomly picked t motifs of lenght k.
+            List[str] : randomly picked t motifs of lenght k.
 
     """
     result = []
@@ -131,14 +140,14 @@ def random_motifs(dna: list, k: int , t: int) -> list:
     return result
 
 #4.2.3
-def randomized_motif_search(dna: list, k: int, t: int) -> list:
+def randomized_motif_search(dna: List[str], k: int, t: int) -> List[str]:
     """
         Generates a list of random t motifs of length k each from a list of string dna using
         a cotinuously improving best motifs search.
 
         Parameters
         ---
-            dna : list<str>
+            dna : List[str]
                 List of k-mer motifs.
             k : int
                 Length of the resulting motifs
@@ -146,7 +155,7 @@ def randomized_motif_search(dna: list, k: int, t: int) -> list:
                 Number of the resutling motifs
         Returns
         ---
-            List of best possible t motifs of lenght k.
+            List[str]: List of best possible t motifs of lenght k.
     """
 
     mot = best_motifs = random_motifs(dna, k, t)
@@ -159,7 +168,7 @@ def randomized_motif_search(dna: list, k: int, t: int) -> list:
             return best_motifs
 
 #4.4.1
-def normalize(probabilities : Dict[str, float]) -> dict:
+def normalize(probabilities : Dict[str, float]) -> Dict[str, float]:
     """
         Normalizes the probability of each k-mer in the probabilities dictionary. 
         
@@ -171,25 +180,25 @@ def normalize(probabilities : Dict[str, float]) -> dict:
         
         Returns
         ---
-            A normalized dictionary where the probability of each k-mer was divided by the sum of all k-mers' probabilities.
+            Dict[str, float]: A normalized dictionary where the probability of each k-mer was divided by the sum of all k-mers' probabilities.
     """
     total = sum(probabilities.values())
     return {key : value / total for key, value in probabilities.items()}
 
 #4.4.2
-def weighted_dice(probabilities : dict) -> str:
+def weighted_dice(probabilities : Dict[str, float]) -> str:
     """
         Randomly chooses a k-mer from the input.
 
         Parameters
         ---
-            probabilities : dict
+            probabilities : Dict[str, float]
                 A dictionary of probabilities, where keys are k-mers and values 
                 are the probabilities of these k-mers (they have to sum up 1).
 
         Returns
         ---
-            A randomly chosen k-mer with respect to the values in the probabilities input.
+            str : A randomly chosen k-mer with respect to the values in the probabilities input.
     """
 
     prob = random.uniform(0, 1)
@@ -217,7 +226,7 @@ def profile_generated_string(text : str, profile : Dict[str, List[float]], k : i
 
         Returns
         ---
-            Randomly chosen str of size k.
+            Dict[str, List[float]]: Randomly chosen str of size k.
             
     """
     n = len(text)
@@ -226,6 +235,7 @@ def profile_generated_string(text : str, profile : Dict[str, List[float]], k : i
     for i in range(n-k+1):
         probabilities[text[i:i+k]] = pr(text[i:i+k], profile)
     probabilities = normalize(probabilities)
+
     return weighted_dice(probabilities)
     
 #4.4.4
@@ -246,7 +256,7 @@ def gibbs_sampler(dna : List[str], k : int, t : int, n : int = 100) -> List[str]
         
         Returns
         ---
-            List of best possible motifs.
+            Lis[str] : List of best possible motifs.
     """
 
     best_motifs = random_motifs(dna, k, t)
