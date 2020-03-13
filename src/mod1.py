@@ -1,56 +1,84 @@
-#Written in CamelCase because the code validation tool
-#only accepts the function to be named like this
+from typing import Dict, List
+
 #1.1
-def PatternCount(Text, Pattern):
+def pattern_count(text : str, pattern : str) -> int:
     """ 
-		Returns how many times the pattern string Pattern
-		is present in the string Text
+		Counts the times the given pattern is present in text.
+		
+		Parameters
+		---
+			text : str
+				The text to search in.
+			pattern : str
+				The pattern to search in text.
+		
+		Returns
+		---
+			int : How many times the pattern string is present in text.
 	"""
     count = 0
-    pattern_len = len(Pattern)
-    text_len = len(Text)
+    pattern_len = len(pattern)
+    text_len = len(text)
 
     for i in range(text_len - pattern_len + 1):
         
-        if(Text[i : i + pattern_len] == Pattern):
+        if(text[i : i + pattern_len] == pattern):
             count += 1
     
     return count
 
 #1.2
-def pattern_count_kmer(text, kmer):
+def pattern_count_kmer(text : str, k : int) -> str:
 	
 	"""
-		Returns a tuple with the most frequent k-mer.
-		A k-mer is a pattern or string of nucleotides 
-		of lenght k
+		Returns the most frequent k-mer in text.
+		
+		Parameters
+		---
+			text : str
+				Nucleotide equence to search in.
+			k : int
+				Length of the mer.
+
+		Returns
+		---
+			int : Most frequent k-mer.
 	"""
-
-	result = ""
+	result = ''
 	count = 0
-
-	for i in range(len(text) - kmer + 1):
-		step = i + kmer
+	for i in range(len(text) - k + 1):
+		step = i + k
 		mer = text[i:step]
 		match_count = 1
 		
-		for j in range(step, len(text) - kmer +1):
+		for j in range(step, len(text) - k +1):
 
-			if ( text[j:j+kmer] == mer ):
+			if ( text[j:j+k] == mer ):
 				match_count += 1
 
 		if( match_count > count):
 			result = mer
 			count = match_count
 	
-	return (result, count)
+	return result
 
 
-#1.3
-def frequency_map(text, k):
+#1.3.1
+def frequency_map(text : str, k : int) -> Dict[str, int]:
 	"""
-		Returns a map whose key is a k-mer and its
+		Creates a frequency map whose key is a k-mer and its
 		value is the times that mer is present in text.
+
+		Parameters
+		---
+			text : str
+				Nucleotide string to search for k-mers.
+			k : int
+				Length of the mers in the frequency map.
+		
+		Returns
+		---
+			Dict[str, int] : Dictionary of k-mers and the times they are present in text.
 	"""
 
 	text_len = len(text)
@@ -65,9 +93,23 @@ def frequency_map(text, k):
 
 	return freq_map
 
-#1.3(2)
+#1.3.2
 def frequent_words(text, k):
+	"""
+		Creates a frequency map whose key is a k-mer and its
+		value is the times that mer is present in text.
 
+		Parameters
+		---
+			text : str
+				Nucleotide string to search for k-mers.
+			k : int
+				Length of the mers in the frequency map.
+		
+		Returns
+		---
+			Dict[str, int] : Dictionary of k-mers and the times they are present in text.
+	"""
 	freq_map = frequency_map(text, k)
 	most_freq = max(freq_map.values())
 	result = []
@@ -78,17 +120,36 @@ def frequent_words(text, k):
 	
 	return result
 
-#1.4(1)
+#1.4.1
 def reverse(pattern):
 	"""
-		Returns the reverse of the string pattern
+		Returns the reverse of the string pattern.
+
+		Parameters
+		---
+			pattern : str
+				String of nucleotides to be reversed.
+		
+		Returns
+		---
+			str : String of nucleotides reversed.
 	"""
 	return pattern[::-1]
 
-#1.4(2)
+#1.4.2
 def complement(pattern):
 	"""
-		Returns the complement of the nucleotide(pattern)
+		Returns the complement of the nucleotide(pattern).
+
+		Parameters
+		---
+			pattern : str
+				String of nucleotides.
+		
+		Returns
+		---
+			str : The complement of the given string of nucleotides.
+
 	"""
 	comp_map = {"T":"A", "A":"T", "C":"G", "G":"C"}
 	result = ""
@@ -98,18 +159,39 @@ def complement(pattern):
 	
 	return result
 
-#1.4(3)
+#1.4.3
 def reverse_complement(pattern):
 	"""
-		Returns the reverse complement of a nucleotide(pattern)
+		Returns the reverse complement of a nucleotide string.
+
+		Parameters
+		---
+			pattern : str
+				String of nucleotides.
+
+		Returns
+		---
+			str : The reverse complement of the given string of nucleotides.
 	"""
 	return reverse(complement(pattern))
 
-#1.4(4)
-def pattern_match_positions(pattern, genome):
+#1.4.4
+def pattern_match_positions(pattern : str, genome : str) -> List[int]:
 	"""
 		Returns a list with the positions in genome where
 		pattern starts.
+
+		Parameters
+		---
+			pattern : str
+				The pattern to find.
+			genome : str
+				The genome string where pattern positions are going to be searched.
+		
+		Returns
+		---
+			List[int] : List of all positions where the given pattern starts 
+				in the given genome string.
 	"""
 	positions = []
 	genome_len = len(genome)
