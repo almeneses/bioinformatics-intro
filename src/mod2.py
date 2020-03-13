@@ -1,13 +1,16 @@
-from mod1 import PatternCount
+import os
+from typing import Dict, List
+from mod1 import pattern_count
+
 
 #2.1
-def symbol_array(genome, symbol):
+def symbol_array(genome : str, symbol : str) -> List[str]:
     result = {}
     genome_len = len(genome)
     extended_genome = genome + genome[0:genome_len // 2]
 
     for i in range(genome_len):
-        result[i] = PatternCount(extended_genome[i:i + (genome_len // 2)], symbol)
+        result[i] = pattern_count(extended_genome[i:i + (genome_len // 2)], symbol)
     
     return result
 
@@ -18,7 +21,7 @@ def improved_symbol_array(genome, symbol):
     window_size = genome_len // 2
     extended_genome = genome + genome[0:window_size]
 
-    result[0] = PatternCount(extended_genome[0:window_size], symbol)
+    result[0] = pattern_count(extended_genome[0:window_size], symbol)
 
     for i in range(1, genome_len):
         result[i] = result[i-1]
@@ -129,15 +132,15 @@ def aprox_pattern_count(genome, pattern, d):
     return count    
 
 def test_functions():
-    with open("../decoded-genomes/escherichia_coli.txt", "r") as ecoli_file:
+    ecoli_file_path = os.path.join(os.path.dirname(__file__), "../decoded-genomes/escherichia_coli.txt")
+    with open(ecoli_file_path, "r") as ecoli_file:
         ecoli_genome = ecoli_file.read()
     
     #this function takes forever to execute due
     #to intentional bad optimization
-    
     #print(symbol_array(ecoli_genome, "C")) 
     
-    #print (improved_symbol_array(ecoli_genome, "C"))
+    print (improved_symbol_array(ecoli_genome, "C"))
     print (skew_array("TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT"))
     print (minimum_skew("TAAAGACTGCCGAGAGGCCAACACGAGTGCTAGAACGAGGGGCGTAAACGCGGGTCCGAT"))
     print(aprox_pattern_matching("CCAAATCCCCTCATGGCATGCATTCCCGCAGTATTTAATCCTTTCATTCTGCATATAAGTAGTGAAGGTATAGAAACCCGTTCAAGCCCGCAGCGGTAAAACCGAGAACCATGATGAATGCACGGCGATTGCGCCATAATCCAAACA", "AATCCTTTCA", 3))
