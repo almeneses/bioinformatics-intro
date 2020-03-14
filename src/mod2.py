@@ -5,25 +5,53 @@ from mod1 import pattern_count
 
 #2.1
 def symbol_array(genome : str, symbol : str) -> List[str]:
-    result = {}
-    genome_len = len(genome)
-    extended_genome = genome + genome[0:genome_len // 2]
+    """
+        Finds all the positions where the given symbol is present in the given genome.
 
-    for i in range(genome_len):
-        result[i] = pattern_count(extended_genome[i:i + (genome_len // 2)], symbol)
+        Parameters
+        ---
+            genome : str
+                The genome string to search in.
+            symbol : str
+                The symbol string to search for.
+        Returns
+        ---
+            List[str] : List of all positions where the symbol appears in the genome.
+    """
+
+    result = {}
+    window_size = len(genome) // 2
+    extended_genome = genome + genome[0:window_size]
+
+    for i in range(len(genome)):
+        result[i] = pattern_count(extended_genome[i:i + window_size], symbol)
     
     return result
 
 #2.1.1
-def improved_symbol_array(genome, symbol):
-    result = {}
-    genome_len = len(genome)
-    window_size = genome_len // 2
-    extended_genome = genome + genome[0:window_size]
+def improved_symbol_array(genome : str, symbol : str) -> List[str]:
 
+    """
+        Finds all the positions where the given symbol is present in the given genome.
+        (Improved, faster version).
+
+        Parameters
+        ---
+            genome : str
+                The genome string to search in.
+            symbol : str
+                The symbol string to search for.
+        Returns
+        ---
+            List[str] : List of all positions where the symbol appears in the genome.
+    """
+    result = {}
+    window_size = len(genome) // 2
+    extended_genome = genome + genome[0:window_size]
     result[0] = pattern_count(extended_genome[0:window_size], symbol)
 
-    for i in range(1, genome_len):
+    for i in range(1, len(genome)):
+
         result[i] = result[i-1]
 
         if (extended_genome[i-1] == symbol):
@@ -34,9 +62,20 @@ def improved_symbol_array(genome, symbol):
     return result
 
 #2.4.1
-def skew_array(genome):
+def skew_array(genome : str) -> List[int]:
     """
-        Returns the skew array of the genome (string) 
+        Finds the skew array of the genome (string). The Skew array
+        is an array where skew[i] = (ocurrences of G) - (ocurrences of C), 
+        skew[0] is always 0. 
+
+        Parameters
+        ---
+            genome : str
+                the genome string to generate the skew array from.
+        
+        Returns
+        ---
+            List[int] : Skew array with the counts of # of G's minus # of C's.
     """
 
     result = [0]
@@ -56,24 +95,39 @@ def skew_array(genome):
     return result
     
 #2.4.2
-# Minimum Skew Problem: Find a position in a genome where the skew diagram attains a minimum.
-# Input: A DNA string Genome.
-# Output: All integer(s) i minimizing Skew[i] among all values of i (from 0 to len(Genome)).
+def minimum_skew(genome : str) -> List[int]:
+    """
+        Finds a position in a genome where the skew diagram attains a minimum.
 
-def minimum_skew(genome):
+        Parameters
+        ---
+            genome : str
+                A DNA string.
+            
+        Returns
+        ---
+            List[int] : All the positions in genome where skew is minimum.
+    """
+
     skew_arr = skew_array(genome)
     skew_min = min(skew_arr)
     return [ index for index, value in enumerate(skew_arr) if value == skew_min ]
 
 #2.5.1
-# Hamming Distance Problem: Compute the Hamming distance between two strings.
-# Input: Two strings of equal length.
-# Output: The Hamming distance between these strings.
-
-def hamming_distance(p, q):
+def hamming_distance(p : str, q : str) -> int:
     """
-        Returns the number of diferent characters (distance) between strings
-        p and q
+        Calculates the number of different characters between two strings of equal length (Hamming distance).
+        
+        Parameters
+        ---
+            p : str
+                String to be compared.
+            q : str
+                String to be compared.
+                
+        Returns
+        ---
+         int : The Hamming distance between the given strings.
     """
     if len(p) != len(q):
         return
@@ -86,14 +140,25 @@ def hamming_distance(p, q):
     return distance
 
 # 2.5.2
-# Approximate Pattern Matching Problem: Find all approximate occurrences of a pattern in a string.
-# Input: Strings pattern and genome along with an integer d.
-# Output: All starting positions where pattern appears as a substring of genome with at most d mismatches.
-
-def aprox_pattern_matching(genome, pattern, d):
+def aprox_pattern_matching(genome : str, pattern : str, d : int) -> List[int]:
     """
-        Returns a list of starting positions where pattern is a substring of genome
-        with at most d mismatches
+        Finds  the starting positions of the approximate occurrences of a pattern 
+        in a genome string.
+
+        Parameters
+        ---
+            genome : str
+                The genome string to search in.
+            pattern : str
+                The pattern string to search for.
+            d : int
+                The maximum number of mismatches allowed for a pattern to be
+                considered acceptable.
+
+        Returns
+        ---
+            List[int] : Starting positions where pattern is a substring of genome
+                with maximum d mismatches.
     """
     pattern_len = len(pattern)
     mismatch_count = 0
@@ -109,14 +174,24 @@ def aprox_pattern_matching(genome, pattern, d):
     return positions
 
 #2.5.3
-# Approximate Pattern Count Problem: Count all the approximate ocurrences of a pattern in a string.
-# Input: Strings genome and pattern along with an integer d.
-# Output: The count of times the pattern is present in the genome with a difference of max d nucleotides.
-
-def aprox_pattern_count(genome, pattern, d):
+def aprox_pattern_count(genome : str, pattern : str, d : int) -> int:
     """
-        Returns the count of times pattern is present in genome
-        with at most d mismatches
+        Counts all the approximate ocurrences of a pattern in a genome string.
+
+        Parameters
+        ---
+            genome : str
+                The genome string to search in.
+            pattern : str
+                The pattern string to search for.
+            d : int
+                The maximum number of mismatches allowed for a pattern to be
+                considered acceptable.
+
+        Returns
+        ---
+            int : The amount of times the given pattern is present in the genome
+                with maximum d mismatches.
     """
     pattern_len = len(pattern)
     mismatch_count = 0
@@ -146,4 +221,6 @@ def test_functions():
     print(aprox_pattern_matching("CCAAATCCCCTCATGGCATGCATTCCCGCAGTATTTAATCCTTTCATTCTGCATATAAGTAGTGAAGGTATAGAAACCCGTTCAAGCCCGCAGCGGTAAAACCGAGAACCATGATGAATGCACGGCGATTGCGCCATAATCCAAACA", "AATCCTTTCA", 3))
     print (aprox_pattern_count("TTTAGAGCCTTCAGAGG", "GAGG", 2))
     
-test_functions()
+
+if __name__ == '__main__':
+    test_functions()
