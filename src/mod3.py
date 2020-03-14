@@ -1,28 +1,41 @@
+from typing import List, Dict
 #3.3.1
-# Count
-# Input:  A set of kmers Motifs
-# Output: Count(Motifs)
-def count_motifs(motifs):
+def count_motifs(motifs : List[str]) -> Dict[str, int]:
+    """
+        Counts the instances per column of each nucleotide in the motifs list.
 
+        Paramters
+        ---
+            motifs : List[str]
+                List of k-mers strings.
+            
+        Returns
+        ---
+            Dict[str, int] : The count of each motif in each column of the given 
+            motifs list of strings.
+    """
     count_dict = {key : [0]*len(motifs[0]) for key in "ACGT"}
-    matrix_len = len(motifs)
-    motif_len = len(motifs[0])
-    
-    for i in range(matrix_len):
-        for j in range(motif_len):
+
+    for i in range(len(motifs)):
+        for j in range(len(motifs[0])):
             nucleotide = motifs[i][j]
             count_dict[nucleotide][j] += 1
     
     return count_dict
 
 #3.3.2
-# Profile
-# Input:  A list of kmers Motifs
-# Output: the profile matrix of Motifs, as a dictionary of lists.
-def profile(motifs):
+def profile(motifs : List[str]) -> Dict[str, List[float]]:
     """
-        Returns the profile matrix of motifs, as a dictionary of lists, from
-        a list of kmers as motifs.
+        Calculates the profile matrix of the given motifs list of stirngs.
+
+        Parameters
+        ---
+            motifs : List[str]
+                List of k-mers strings.
+            
+        Returns
+        ---
+            Dict[str, List[float]] : The calculated profile of motifs, as a dictionary of lists.
     """
     count_dict  = count_motifs(motifs)
     motif_len = len(motifs)
@@ -32,29 +45,49 @@ def profile(motifs):
     return count_dict
 
 #3.3.3
-# Consensus
-# Input:  A set of kmers Motifs
-# Output: A consensus string of Motifs.
+def consensus(motifs : List[str]) -> str:
+    """
+        Calculates the consensus string of motifs.
 
-def consensus(motifs):
-    
+        Parameters
+        ---
+            motifs : List[str]
+                The list of k-mers motifs.
+
+        Returns
+        ---
+            str : A consensus string of Motifs.
+    """
     count_dict = count_motifs(motifs)
     j = len(motifs)
     concensus = ""
+    count_dict_keys = count_dict.keys()
 
     for j in range(len(motifs[0])):
         frequent_nucleotide = ""
         quantity = 0
-        for key in count_dict.keys():
+        for key in count_dict_keys:
             if count_dict[key][j] > quantity:
                 quantity = count_dict[key][j]
                 frequent_nucleotide = key
         concensus += frequent_nucleotide
     
-    return concensus        
+    return concensus 
 
-def score(motifs):
+#3.3.4
+def score(motifs : List[str]) -> int:
+    """
+        Calculates the total score of the given motifs.
 
+        Parameters
+        ---
+            motifs : List[str]
+                The list of k-mers motifs.
+
+        Returns
+        ---
+            int : The score from the given list of string motifs.
+    """
     most_frequent = consensus(motifs)
     count = count_motifs(motifs)
     elements_per_column = len(motifs)
@@ -67,10 +100,20 @@ def score(motifs):
 
 
 # 3.4.1
-def pr(text, profile):
+def pr(text : str, profile : Dict[str, List[float]]) -> float:
     """
-        Returns the probability that profile
-        generates the text string.
+        Calculates the probability of the given profile to generate the given text.
+        
+        Parameters
+        ---
+            text : str
+                The string to calculate the probability.
+            profile : Dict[str, List[float]]
+                The profile matrix needed for the probability calculation.
+        
+        Returns
+        ---
+            float : The probability that profile can generate the given text string.
     """
     p = 1
     for i in range(len(text)):
@@ -78,11 +121,23 @@ def pr(text, profile):
     return p
     
 # 3.4.2
-# Profile-most Probable k-mer Problem: Find a Profile-most probable k-mer in a string.
-# Input: A string text, an integer k, and a 4 x k matrix profile.
-# Output: A Profile-most probable k-mer in Text.
-def profile_most_probable_kmer(text, profile, k):
-    
+def profile_most_probable_kmer(text : str, profile : Dict[str, List[float]], k : int) -> str:
+    """
+        Finds the most probable k-mer in a string with the given profile.
+
+        Parameters
+        ---
+            text : str
+                The string to search in the profile most probable k-mer.
+            profile : Dict[str, List[float]]
+                A profile matrix.
+            k : int
+                The length of the most probable k-mer.
+        
+        Returns
+        ---
+            str : The most probable k-mer in the given text based on the given profile.
+    """
     probability = -1
     most_probable_text = ""
     
@@ -97,10 +152,24 @@ def profile_most_probable_kmer(text, profile, k):
     return most_probable_text
     
 #3.4.3
-def greedy_motif_search(dna, k, t):
+def greedy_motif_search(dna : List[str], k : int, t : int) -> List[str]:
     """
-        Returns an array of t motifs of length k from the
-        Dna string array dna using a greedy algorithm approach.
+        Creates an array of motifs from the given dna string array 
+        using a greedy algorithm approach.
+        
+        Parameters
+        ---
+            dna : List[str]
+                The DNA string to search in.
+            k : int
+                The length of the resulting k-mers.
+            t : int
+                The amount of k-mers to return.
+
+        Returns
+        ---
+            List[str] : Array of t motifs of length k from the
+                given dna using a greedy algorithm approach.
     """
     best_motifs = [x[0:k] for x in dna]
     
@@ -169,4 +238,5 @@ def test_functions():
         profile_most_probable_kmer_input[1], profile_most_probable_kmer_input[2]))
     print(greedy_motif_search(greedy_motif_search_input[0], greedy_motif_search_input[1], greedy_motif_search_input[2]))
 
-#test_functions()
+if __name__ == '__main__':
+    test_functions()
